@@ -1,6 +1,6 @@
 # packer-aws-runner
 
-Basic CICD node for using Hashicorp's Packer as GitLab runner in AWS. To make it as slim as possible, binaries for software other than AWS CLI are copied from another container built for compiling these tools.
+Basic CICD node for using Hashicorp's Packer as GitLab runner in AWS. To make it as slim as possible the binaries for software other than AWS CLI are copied from a set of other containers, created specifically for compiling those tools.
 
 ## What's included
 

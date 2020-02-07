@@ -4,9 +4,11 @@ FROM alpine:3.10
 
 LABEL maintainer="Dominik L. Borkowski"
 
-# get binaries from a container used for the sole purpose of building them
+# get binaries from build containers
 COPY --from=dominikborkowski/build-packer-goss-provisioner:latest \
     /go/bin/packer /go/bin/goss /go/bin/packer-provisioner-goss /bin/
+
+COPY --from=dominikborkowski/build-goss:latest /go/bin/goss /bin/
 
 # Install few essential tools and AWS CLI, then clean up
 RUN apk --no-cache --upgrade add curl rsync jq \
