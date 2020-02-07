@@ -16,3 +16,9 @@ Basic CICD node for using Hashicorp's Packer as GitLab runner in AWS. To make it
 * jq
 * rsync
 
+## Location of tools
+
+* /bin/goss
+* /bin/goss-glibc
+* /bin/packer
+* /bin/packer-provisioner-goss

@@ -4,11 +4,12 @@ FROM alpine:3.10
 
 LABEL maintainer="Dominik L. Borkowski"
 
-# get binaries from build containers
+# get binaries from musl based container
 COPY --from=dominikborkowski/build-packer-goss-provisioner:latest \
     /go/bin/packer /go/bin/goss /go/bin/packer-provisioner-goss /bin/
 
-COPY --from=dominikborkowski/build-goss:latest /go/bin/goss /bin/
+# get binaries from glibc based container
+COPY --from=dominikborkowski/build-goss-glibc:latest /go/bin/goss-glibc /bin/
 
 # Install few essential tools and AWS CLI, then clean up
 RUN apk --no-cache --upgrade add curl rsync jq \
@@ -17,6 +18,3 @@ RUN apk --no-cache --upgrade add curl rsync jq \
     apk --no-cache del python3-dev musl-dev libffi-dev openssl-dev linux-headers && \
     rm -rf /var/cache/apk/* && \
     find / -type f -name "*.py[co]" -delete
-
-
-
