@@ -2,11 +2,11 @@
 #  since Alpine 3.11 uses python 3.8, which raises a SyntaxWarning with aws CLI
 FROM alpine:3.10
 
-# get packer binary out of HashiCorp's image
-COPY --from=hashicorp/packer:latest /bin/packer /bin/packer
+LABEL maintainer="Dominik L. Borkowski"
 
-# get goss & dgoss from Ahmed Elsabbahy's image
-COPY --from=aelsabbahy/goss:latest /goss/goss /goss/dgoss /bin/
+# get binaries from a container used for the sole purpose of building them
+COPY --from=dominikborkowski/build-packer-goss-provisioner:latest \
+    /go/bin/packer /go/bin/goss /go/bin/packer-provisioner-goss /bin/
 
 # Install few essential tools and AWS CLI, then clean up
 RUN apk --no-cache --upgrade add curl rsync jq \
@@ -15,3 +15,6 @@ RUN apk --no-cache --upgrade add curl rsync jq \
     apk --no-cache del python3-dev musl-dev libffi-dev openssl-dev linux-headers && \
     rm -rf /var/cache/apk/* && \
     find / -type f -name "*.py[co]" -delete
+
+
+
