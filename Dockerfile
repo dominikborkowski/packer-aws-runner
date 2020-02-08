@@ -15,6 +15,6 @@ COPY --from=dominikborkowski/build-goss-glibc:latest /go/bin/goss /bin/goss-glib
 RUN apk --no-cache --upgrade add curl rsync jq \
     gcc python3 python3-dev musl-dev libffi-dev openssl-dev && \
     pip3 --no-cache-dir install --upgrade awscli aws-sam-cli && \
-    apk --no-cache del python3-dev musl-dev libffi-dev openssl-dev linux-headers && \
+    apk --no-cache del python3-dev musl-dev libffi-dev openssl-dev linux-headers gcc && \
     rm -rf /var/cache/apk/* && \
     find / -type f -name "*.py[co]" -delete
