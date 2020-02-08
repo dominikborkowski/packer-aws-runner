@@ -9,7 +9,7 @@ COPY --from=dominikborkowski/build-packer-goss-provisioner:latest \
     /go/bin/packer /go/bin/goss /go/bin/packer-provisioner-goss /bin/
 
 # get binaries from glibc based container
-COPY --from=dominikborkowski/build-goss-glibc:latest /go/bin/goss-glibc /bin/
+COPY --from=dominikborkowski/build-goss-glibc:latest /go/bin/goss /bin/goss-glibc
 
 # Install few essential tools and AWS CLI, then clean up
 RUN apk --no-cache --upgrade add curl rsync jq \
