@@ -39,7 +39,7 @@ COPY --from=build_glibc_bins \
 RUN apk --no-cache --upgrade --virtual=build_environment add \
         gcc python3-dev musl-dev libffi-dev openssl-dev && \
     apk --no-cache --upgrade --virtual=random_tools add \
-        curl rsync jq python3 &&\
+        curl rsync jq python3 gomplate &&\
     pip3 --no-cache-dir install --upgrade awscli aws-sam-cli && \
     apk --no-cache del build_environment && \
     rm -rf /var/cache/apk/* && \
