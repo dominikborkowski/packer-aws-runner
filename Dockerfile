@@ -34,8 +34,7 @@ COPY --from=build_glibc_bins \
     /go/bin/goss /bin/goss-glibc
 
 # Get packer binaries from their official container
-ARG PACKER_VER=1.5.4
-COPY --from=hashicorp/packer:${PACKER_VER} /bin/packer /bin/packer
+COPY --from=hashicorp/packer:1.5.4 /bin/packer /bin/packer
 
 # Install few essential tools and AWS CLI, then clean up
 RUN apk --no-cache --upgrade --virtual=build_environment add \
