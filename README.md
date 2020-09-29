@@ -4,10 +4,10 @@ Basic CICD node for using Hashicorp's Packer as GitLab runner in AWS. To make it
 
 ## What's included
 
-* [Alpine Linux](https://alpinelinux.org/) 3.10
+* [Alpine Linux](https://alpinelinux.org/) 3.11
 * [HashiCorp Packer](https://packer.io/) 1.6.3
-* [Goss](https://github.com/aelsabbahy/goss/) 0.3.10
-* [Packer Provisioner Goss](https://github.com/YaleUniversity/packer-provisioner-goss) 1.0.0
+* [Goss](https://github.com/aelsabbahy/goss/) 0.3.13
+* [Packer Provisioner Goss](https://github.com/YaleUniversity/packer-provisioner-goss) 1.4.0
 * [AWS CLI](https://aws.amazon.com/cli/) 1.18.149
 
 ### GOSS

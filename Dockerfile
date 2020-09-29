@@ -1,5 +1,5 @@
 # Build goss with glibc system
-FROM golang:1.13 AS build_glibc_bins
+FROM golang:1.14 AS build_glibc_bins
 ARG GOSS_VER=0.3.13
 ENV GO111MODULE=on
 RUN go get github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
@@ -7,8 +7,8 @@ RUN go get github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
     go clean -cache -modcache
 
 # Build goss and packer-provisioner-goss with musl
-FROM golang:1.13-alpine3.10 as build_musl_bins
-ARG PACKER_PROVISIONER_GOSS_VER=1.0.0
+FROM golang:1.14-alpine3.11 as build_musl_bins
+ARG PACKER_PROVISIONER_GOSS_VER=1.4.0
 ARG GOSS_VER=0.3.13
 ENV GO111MODULE=on
 RUN apk --no-cache --upgrade --virtual=build_environment add binutils && \
@@ -19,10 +19,7 @@ RUN apk --no-cache --upgrade --virtual=build_environment add binutils && \
     apk --no-cache del build_environment
 
 # Finally, put everything together in a new container
-
-# Use latest Alpine Linux 3.10 as our base image,
-#  since Alpine 3.11 uses python 3.8, which raises a SyntaxWarning with aws CLI
-FROM alpine:3.10
+FROM alpine:3.11
 LABEL maintainer="Dominik L. Borkowski"
 
 # Get binaries from musl based container
