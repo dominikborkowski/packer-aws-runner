@@ -5,10 +5,10 @@ Basic CICD node for using Hashicorp's Packer as GitLab runner in AWS. To make it
 ## What's included
 
 * [Alpine Linux](https://alpinelinux.org/) 3.10
-* [HashiCorp Packer](https://packer.io/) 1.5.4
+* [HashiCorp Packer](https://packer.io/) 1.6.3
 * [Goss](https://github.com/aelsabbahy/goss/) 0.3.10
 * [Packer Provisioner Goss](https://github.com/YaleUniversity/packer-provisioner-goss) 1.0.0
-* [AWS CLI](https://aws.amazon.com/cli/) 1.17.9
+* [AWS CLI](https://aws.amazon.com/cli/) 1.18.149
 
 ### GOSS
 
@@ -30,3 +30,9 @@ There are two versions of GOSS included: musl and glibc based one. Former can be
 * rsync
 
 
+# Quick start
+
+```
+docker build --tag packer-aws-runner:1.0 .
+docker run -it packer-aws-runner:1.0
+```
