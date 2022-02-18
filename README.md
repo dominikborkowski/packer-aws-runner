@@ -18,6 +18,7 @@ In addition, there is an ARM64 goss version compiled for ARM64 architecture, whi
 
 ### Location of tools
 
+* /bin/dgoss
 * /bin/goss
 * /bin/goss-glibc
 * /bin/goss-glibc-arm64
@@ -27,6 +28,7 @@ In addition, there is an ARM64 goss version compiled for ARM64 architecture, whi
 
 ## Additional tools
 
+* bash
 * curl
 * git
 * jq
@@ -58,14 +60,18 @@ Environment variable `TAG` controls the docker image tag, if omitted docker-comp
 To build a specific version, in addition to `latest`, you can run the following:
 
 ```
+docker-compose build
 docker-compose push
+TAG='1.7.10' docker-compose build
 TAG='1.7.10' docker-compose push
 ```
 
 To build this image to run from a platform other than X86_64 (AMD64), specify it as such:
 
 ```
-PLATFORM='linux/arm64' docker-compose build push
+PLATFORM='linux/arm64' docker-compose build
+PLATFORM='linux/arm64' docker-compose push
+PLATFORM='linux/arm64' TAG='1.7.10' docker-compose build
 PLATFORM='linux/arm64' TAG='1.7.10' docker-compose push
 ```
 
