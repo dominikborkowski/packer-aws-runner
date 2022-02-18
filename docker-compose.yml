@@ -1,0 +1,8 @@
+version: '3'
+services:
+
+  packer-aws-runner:
+    container_name: 'packer-aws-runner'
+    build:
+      context: ./
+    image: dominikborkowski/packer-aws-runner:${RELEASE:-1.7.10}
