@@ -5,4 +5,4 @@ services:
     container_name: 'packer-aws-runner'
     build:
       context: ./
-    image: dominikborkowski/packer-aws-runner:${RELEASE:-1.7.10}
+    image: dominikborkowski/packer-aws-runner:${TAG:-latest}
