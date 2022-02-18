@@ -48,3 +48,13 @@ docker build --tag packer-aws-runner:1.7.10 .
 docker run -it packer-aws-runner:1.7.10
 ```
 
+# Building and publishing
+
+Environment variable `TAG` controls the docker image tag, if omitted docker-compose will use `latest`.
+
+To build a specific version, in addition to `latest`, you can run the following:
+
+```
+docker-compose push
+TAG='1.7.10' docker-compose push
+```

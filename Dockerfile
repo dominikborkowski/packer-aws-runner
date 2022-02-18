@@ -43,3 +43,7 @@ RUN apk --no-cache --upgrade --virtual=build_environment add \
     apk --no-cache del build_environment && \
     rm -rf /var/cache/apk/* && \
     find / -type f -name "*.py[co]" -delete
+
+# Install packer config and run its initialization, which will pull required modules
+COPY config.pkr.hcl /root/
+RUN packer init /root/config.pkr.hcl
