@@ -6,6 +6,14 @@ RUN go install github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
     strip ${GOPATH}/bin/* && \
     go clean -cache -modcache
 
+# Build goss with glibc system - ARM64 edition
+FROM --platform=linux/arm64 golang:1.17 AS build_glibc_bins_arm64
+ARG GOSS_VER=0.3.16
+ENV GO111MODULE=on
+RUN go install github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
+    strip ${GOPATH}/bin/* && \
+    go clean -cache -modcache
+
 # Build goss and packer-provisioner-goss with musl
 FROM golang:1.17-alpine3.14 as build_musl_bins
 ARG PACKER_PROVISIONER_GOSS_VER=3
@@ -28,8 +36,8 @@ COPY --from=build_musl_bins \
     /go/bin/goss /go/bin/packer-provisioner-goss /bin/
 
 # Get binaries from glibc based container
-COPY --from=build_glibc_bins \
-    /go/bin/goss /bin/goss-glibc
+COPY --from=build_glibc_bins /go/bin/goss /bin/goss-glibc
+COPY --from=build_glibc_bins_arm64 /go/bin/goss /bin/goss-glibc-arm64
 
 # Get packer binaries from their official container
 COPY --from=hashicorp/packer:1.7.10 /bin/packer /bin/packer
