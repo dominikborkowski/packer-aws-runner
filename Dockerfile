@@ -1,27 +1,27 @@
 # Build goss with glibc system
 FROM golang:1.17 AS build_glibc_bins
-ARG GOSS_VER=0.3.16
+ARG GOSS_VER=0.3.18
 ENV GO111MODULE=on
-RUN go install github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
+RUN go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
     strip ${GOPATH}/bin/* && \
     go clean -cache -modcache
 
 # Build goss with glibc system - ARM64 edition
 FROM --platform=linux/arm64 golang:1.17 AS build_glibc_bins_arm64
-ARG GOSS_VER=0.3.16
+ARG GOSS_VER=0.3.18
 ENV GO111MODULE=on
-RUN go install github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
+RUN go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
     strip ${GOPATH}/bin/* && \
     go clean -cache -modcache
 
 # Build goss and packer-provisioner-goss with musl
 FROM golang:1.17-alpine3.14 as build_musl_bins
 ARG PACKER_PROVISIONER_GOSS_VER=3
-ARG GOSS_VER=0.3.16
+ARG GOSS_VER=0.3.18
 ENV GO111MODULE=on
 RUN apk --no-cache --upgrade --virtual=build_environment add binutils git && \
     go install github.com/YaleUniversity/packer-provisioner-goss/v${PACKER_PROVISIONER_GOSS_VER}@latest && \
-    go install github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
+    go install -ldflags "-X main.version=${GOSS_VER} -s -w"  github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
     strip $GOPATH/bin/* && \
     go clean -cache -modcache && \
     apk --no-cache del build_environment
@@ -40,7 +40,7 @@ COPY --from=build_glibc_bins /go/bin/goss /bin/goss-glibc
 COPY --from=build_glibc_bins_arm64 /go/bin/goss /bin/goss-glibc-arm64
 
 # Get packer binaries from their official container
-COPY --from=hashicorp/packer:1.8.0 /bin/packer /bin/packer
+COPY --from=hashicorp/packer:1.8.2 /bin/packer /bin/packer
 
 # Install few essential tools and AWS CLI, then clean up
 RUN apk --no-cache --upgrade --virtual=build_environment add \
