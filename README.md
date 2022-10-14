@@ -4,11 +4,11 @@ Basic CICD node for using Hashicorp's Packer as GitLab runner in AWS. To make it
 
 ## What's included
 
-* [Alpine Linux](https://alpinelinux.org/) 3.14
-* [HashiCorp Packer](https://packer.io/) 1.8.2
-* [Goss](https://github.com/aelsabbahy/goss/) 0.3.18
-* [Packer Provisioner Goss](https://github.com/YaleUniversity/packer-provisioner-goss) 3.1.2
-* [AWS CLI](https://aws.amazon.com/cli/) 1.22.57
+* [Alpine Linux](https://alpinelinux.org/) 3.16
+* [HashiCorp Packer](https://packer.io/) 1.8.3
+* [Goss](https://github.com/aelsabbahy/goss/) 0.3.20
+* [Packer Provisioner Goss](https://github.com/YaleUniversity/packer-provisioner-goss) 3.1.3
+* [AWS CLI](https://aws.amazon.com/cli/) 1.25.91
 
 ### GOSS
 
@@ -49,8 +49,8 @@ docker-compose run packer-aws-runner
 ## Without docker-compose
 
 ```
-docker build --tag packer-aws-runner:1.7.10 .
-docker run -it packer-aws-runner:1.7.10
+docker build --tag packer-aws-runner:1.8.3 .
+docker run -it packer-aws-runner:1.8.3
 ```
 
 # Building and publishing
@@ -62,8 +62,8 @@ To build a specific version, in addition to `latest`, you can run the following:
 ```
 docker-compose build
 docker-compose push
-TAG='1.7.10' docker-compose build
-TAG='1.7.10' docker-compose push
+TAG='1.8.3' docker-compose build
+TAG='1.8.3' docker-compose push
 ```
 
 To build this image to run from a platform other than X86_64 (AMD64), specify it as such:
@@ -71,7 +71,7 @@ To build this image to run from a platform other than X86_64 (AMD64), specify it
 ```
 PLATFORM='linux/arm64' docker-compose build
 PLATFORM='linux/arm64' docker-compose push
-PLATFORM='linux/arm64' TAG='1.7.10' docker-compose build
-PLATFORM='linux/arm64' TAG='1.7.10' docker-compose push
+PLATFORM='linux/arm64' TAG='1.8.3' docker-compose build
+PLATFORM='linux/arm64' TAG='1.8.3' docker-compose push
 ```
 
