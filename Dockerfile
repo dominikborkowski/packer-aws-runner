@@ -1,6 +1,6 @@
 # Build goss with glibc system
 FROM --platform=linux/amd64 golang:1.17 AS build_glibc_bins
-ARG GOSS_VER=0.3.22
+ARG GOSS_VER=0.3.20
 ENV GO111MODULE=on
 RUN go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
     strip ${GOPATH}/bin/* && \
@@ -8,7 +8,7 @@ RUN go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/aelsabbah
 
 # Build goss with glibc system - ARM64 edition
 FROM --platform=linux/arm64 golang:1.17 AS build_glibc_bins_arm64
-ARG GOSS_VER=0.3.22
+ARG GOSS_VER=0.3.20
 ENV GO111MODULE=on
 RUN go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/aelsabbahy/goss/cmd/goss@v${GOSS_VER} && \
     strip ${GOPATH}/bin/* && \
@@ -17,7 +17,7 @@ RUN go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/aelsabbah
 # Build goss and packer-provisioner-goss with musl
 FROM --platform=linux/amd64 golang:1.17-alpine3.16 as build_musl_bins
 ARG PACKER_PROVISIONER_GOSS_VER=3
-ARG GOSS_VER=0.3.22
+ARG GOSS_VER=0.3.20
 ENV GO111MODULE=on
 RUN apk --no-cache --upgrade --virtual=build_environment add binutils git && \
     go install github.com/YaleUniversity/packer-provisioner-goss/v${PACKER_PROVISIONER_GOSS_VER}@latest && \
