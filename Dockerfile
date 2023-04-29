@@ -28,7 +28,9 @@ RUN apk --no-cache --upgrade --virtual=build_environment add binutils git && \
 
 # Finally, put everything together in a new container
 FROM --platform=linux/amd64 alpine:3.16
-LABEL maintainer="Dominik L. Borkowski"
+LABEL org.opencontainers.image.authors "dominik.borkowski@gmail.com"
+LABEL org.opencontainers.image.source "https://github.com/dominikborkowski/packer-aws-runner"
+
 RUN apk --no-cache --upgrade add py3-pip
 
 # Get binaries from musl based container
@@ -40,7 +42,7 @@ COPY --from=build_glibc_bins /go/bin/goss /bin/goss-glibc
 COPY --from=build_glibc_bins_arm64 /go/bin/goss /bin/goss-glibc-arm64
 
 # Get packer binaries from their official container
-COPY --from=hashicorp/packer:1.8.3 /bin/packer /bin/packer
+COPY --from=hashicorp/packer:1.8.6 /bin/packer /bin/packer
 
 # Install few essential tools and AWS CLI, then clean up
 RUN apk --no-cache --upgrade --virtual=build_environment add \
