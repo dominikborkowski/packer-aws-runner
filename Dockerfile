@@ -30,6 +30,7 @@ RUN apk --no-cache --upgrade --virtual=build_environment add binutils git && \
 FROM --platform=linux/amd64 alpine:3.17
 LABEL org.opencontainers.image.authors="dominik.borkowski@gmail.com"
 LABEL org.opencontainers.image.source="https://github.com/dominikborkowski/packer-aws-runner"
+LABEL org.opencontainers.image.description="Hashicorp Packer packaged for GitLab runner in AWS"
 
 RUN apk --no-cache --upgrade add py3-pip
 
