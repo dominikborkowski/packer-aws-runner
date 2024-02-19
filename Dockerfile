@@ -10,7 +10,7 @@ RUN go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/goss-org/
     go clean -cache -modcache
 
 # Build goss and packer-provisioner-goss with musl
-FROM --platform=linux/amd64 golang:1.22-alpine3.18 as build_musl_bins
+FROM --platform=linux/arm64 golang:1.22-alpine3.18 as build_musl_bins
 ARG PACKER_PROVISIONER_GOSS_VER=3
 ARG GOSS_VER=0.3.22
 ENV GO111MODULE=on
@@ -18,7 +18,6 @@ ENV GOARCH=amd64
 RUN apk --no-cache --upgrade --virtual=build_environment add binutils git && \
     go install github.com/YaleUniversity/packer-provisioner-goss/v${PACKER_PROVISIONER_GOSS_VER}@latest && \
     go install -ldflags "-X main.version=${GOSS_VER} -s -w"  github.com/goss-org/goss/cmd/goss@v${GOSS_VER} && \
-    strip $GOPATH/bin/* && \
     go clean -cache -modcache && \
     apk --no-cache del build_environment
 
@@ -35,7 +34,7 @@ RUN apk --no-cache --upgrade add py3-pip
 
 # Get binaries from musl based container
 COPY --from=build_musl_bins \
-    /go/bin/goss /go/bin/packer-provisioner-goss /bin/
+    /go/bin/linux_amd64/goss /go/bin/linux_amd64/packer-provisioner-goss /bin/
 
 # Get binaries from glibc based container
 COPY --from=build_glibc_bins /go/bin/goss /bin/goss-glibc-arm64
