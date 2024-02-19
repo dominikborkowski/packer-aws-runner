@@ -6,4 +6,4 @@ services:
     build:
       context: ./
     image: dominikborkowski/packer-aws-runner:${TAG:-latest}
-    platform: ${PLATFORM:-linux/amd64}
+    platform: ${PLATFORM:-linux/arm64}

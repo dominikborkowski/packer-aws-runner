@@ -1,7 +1,8 @@
-ARG GOSS_VER=0.3.22
+ARG GOSS_VER=0.4.4
 ARG PACKER_PROVISIONER_GOSS_VER=3
 ARG ALPINE_VERSION=3.18
 ARG GOLANG_VERSION=1.22
+ARG PACKER_VERSION=1.10.1
 
 
 # Build goss with glibc system
@@ -28,7 +29,8 @@ RUN apk --no-cache --upgrade --virtual=build_environment add binutils git && \
     apk --no-cache del build_environment
 
 # use upstream packer image
-FROM --platform=linux/amd64 hashicorp/packer:1.8.7 as packer_upstream
+ARG PACKER_VERSION
+FROM --platform=linux/amd64 hashicorp/packer:${PACKER_VERSION} as packer_upstream
 
 # Finally, put everything together in a new container
 FROM --platform=linux/amd64 alpine:${ALPINE_VERSION}
