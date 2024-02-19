@@ -1,7 +1,13 @@
-# Build goss with glibc system
-FROM --platform=linux/arm64 golang:1.20 AS build_glibc_bins
 ARG GOSS_VER=0.3.22
+ARG PACKER_PROVISIONER_GOSS_VER=3
+ARG ALPINE_VERSION=3.18
+ARG GOLANG_VERSION=1.22
+
+
+# Build goss with glibc system
+FROM --platform=linux/arm64 golang:${GOLANG_VERSION} AS build_glibc_bins
 ENV GO111MODULE=on
+ARG GOSS_VER
 # Build goss for FreeBSD - arm64 - currently doesn't build, not sure if go problem or goss
 RUN GOOS=freebsd GOARCH=amd64 go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER}
 RUN GOOS=linux GOARCH=amd64 go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER}
@@ -10,9 +16,9 @@ RUN go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/goss-org/
     go clean -cache -modcache
 
 # Build goss and packer-provisioner-goss with musl
-FROM --platform=linux/arm64 golang:1.22-alpine3.18 as build_musl_bins
-ARG PACKER_PROVISIONER_GOSS_VER=3
-ARG GOSS_VER=0.3.22
+FROM --platform=linux/arm64 golang:${GOLANG_VERSION}-alpine${ALPINE_VERSION} as build_musl_bins
+ARG PACKER_PROVISIONER_GOSS_VER
+ARG GOSS_VER
 ENV GO111MODULE=on
 ENV GOARCH=amd64
 RUN apk --no-cache --upgrade --virtual=build_environment add binutils git && \
@@ -25,7 +31,7 @@ RUN apk --no-cache --upgrade --virtual=build_environment add binutils git && \
 FROM --platform=linux/amd64 hashicorp/packer:1.8.7 as packer_upstream
 
 # Finally, put everything together in a new container
-FROM --platform=linux/amd64 alpine:3.18
+FROM --platform=linux/amd64 alpine:${ALPINE_VERSION}
 LABEL org.opencontainers.image.authors="dominik.borkowski@gmail.com"
 LABEL org.opencontainers.image.source="https://github.com/dominikborkowski/packer-aws-runner"
 LABEL org.opencontainers.image.description="Hashicorp Packer packaged for GitLab runner in AWS"
