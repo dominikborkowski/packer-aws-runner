@@ -8,7 +8,7 @@ Basic CICD node for using Hashicorp's Packer as GitLab runner in AWS. To make it
 * [HashiCorp Packer](https://packer.io/) 1.12.0
 * [Goss](https://github.com/goss-org/goss/) 0.4.9
 * [Packer Provisioner Goss](https://github.com/YaleUniversity/packer-provisioner-goss) 3.2.14
-* [AWS CLI](https://aws.amazon.com/cli/) 1.27.129
+* [AWS CLI](https://aws.amazon.com/cli/) 1.37.26
 
 ### GOSS
 
