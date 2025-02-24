@@ -1,7 +1,7 @@
 ARG GOSS_VER=0.4.9
 ARG PACKER_PROVISIONER_GOSS_VER=3
 ARG ALPINE_VERSION=3.18
-ARG GOLANG_VERSION=1.22
+ARG GOLANG_VERSION=1.24
 ARG PACKER_VERSION=1.12.0
 
 
@@ -10,10 +10,10 @@ FROM --platform=linux/arm64 golang:${GOLANG_VERSION} AS build_glibc_bins
 ENV GO111MODULE=on
 ARG GOSS_VER
 # Build goss for FreeBSD - arm64 - currently doesn't build, not sure if go problem or goss
-RUN GOOS=freebsd GOARCH=amd64 go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER}
-RUN GOOS=linux GOARCH=amd64 go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER}
-RUN GOOS=linux GOARCH=arm64 go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER}
-RUN go install -ldflags "-X main.version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER} && \
+RUN GOOS=freebsd GOARCH=amd64 go install -ldflags "-X github.com/goss-org/goss/util.Version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER}
+RUN GOOS=linux GOARCH=amd64 go install -ldflags "-X github.com/goss-org/goss/util.Version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER}
+RUN GOOS=linux GOARCH=arm64 go install -ldflags "-X github.com/goss-org/goss/util.Version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER}
+RUN go install -ldflags "-X github.com/goss-org/goss/util.Version=${GOSS_VER} -s -w" github.com/goss-org/goss/cmd/goss@v${GOSS_VER} && \
     go clean -cache -modcache
 
 # Build goss and packer-provisioner-goss with musl
