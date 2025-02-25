@@ -1,9 +1,7 @@
 ARG GOSS_VER=0.4.9
-ARG PACKER_PROVISIONER_GOSS_VER=3
 ARG ALPINE_VERSION=3.21
 ARG GOLANG_VERSION=1.24
 ARG PACKER_VERSION=1.12.0
-
 
 # Build goss with glibc system
 FROM --platform=linux/arm64 golang:${GOLANG_VERSION} AS build_glibc_bins
@@ -18,12 +16,10 @@ RUN go install -ldflags "-X github.com/goss-org/goss/util.Version=${GOSS_VER} -s
 
 # Build goss and packer-provisioner-goss with musl
 FROM --platform=linux/arm64 golang:${GOLANG_VERSION}-alpine${ALPINE_VERSION} as build_musl_bins
-ARG PACKER_PROVISIONER_GOSS_VER
 ARG GOSS_VER
 ENV GO111MODULE=on
 ENV GOARCH=amd64
 RUN apk --no-cache --upgrade --virtual=build_environment add binutils git && \
-    go install github.com/YaleUniversity/packer-provisioner-goss/v${PACKER_PROVISIONER_GOSS_VER}@latest && \
     go install -ldflags "-X github.com/goss-org/goss/util.Version=${GOSS_VER} -s -w"  github.com/goss-org/goss/cmd/goss@v${GOSS_VER} && \
     go clean -cache -modcache && \
     apk --no-cache del build_environment
@@ -41,8 +37,7 @@ LABEL org.opencontainers.image.description="Hashicorp Packer packaged for GitLab
 RUN apk --no-cache --upgrade add py3-pip
 
 # Get binaries from musl based container
-COPY --from=build_musl_bins \
-    /go/bin/linux_amd64/goss /go/bin/linux_amd64/packer-provisioner-goss /bin/
+COPY --from=build_musl_bins /go/bin/linux_amd64/goss /bin/
 
 # Get binaries from glibc based container
 COPY --from=build_glibc_bins /go/bin/goss /bin/goss-glibc-arm64
@@ -67,6 +62,8 @@ RUN apk --no-cache --upgrade --virtual=build_environment add \
 RUN curl -L https://raw.githubusercontent.com/aelsabbahy/goss/master/extras/dgoss/dgoss -o /bin/dgoss && \
     chmod +x /bin/dgoss
 
-# Install packer config and run its initialization, which will pull required modules
+# Install packer config and run its initialization, which will pull required modules:
+# - packer-provisioner-goss
+# - aws
 COPY config.pkr.hcl /root/
 RUN packer init /root/config.pkr.hcl
